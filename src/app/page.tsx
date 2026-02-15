@@ -1,6 +1,8 @@
 import { Sparkles, Zap, Shield, Heart } from "lucide-react";
 import Hero from "@/components/Hero";
 import Image from "next/image";
+import HostCTA from "@/components/HostCTA";
+import FeaturedProperties from "@/components/FeaturedProperties";
 
 export default function Home() {
   return (
@@ -124,6 +126,8 @@ export default function Home() {
   </div>
 </section>
 
+<FeaturedProperties />
+<HostCTA />
     </>
   );
 }
