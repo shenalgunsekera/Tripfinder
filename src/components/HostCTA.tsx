@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function HostCTA() {
   return (
-    <section className="w-full bg-primary text-primary-foreground py-24">
+    <section id="become-a-host" className="w-full bg-primary py-24 text-primary-foreground scroll-mt-24">
       <div className="max-w-5xl mx-auto px-6 text-center">
 
         {/* Heading */}
@@ -20,7 +20,7 @@ export default function HostCTA() {
         {/* Button */}
         <div className="mt-8">
           <Link
-            href="/host"
+            href="/#become-a-host"
             className="inline-block bg-white text-primary font-semibold px-8 py-3 rounded-xl shadow-md hover:scale-105 transition-transform duration-200"
           >
             Become a Host

@@ -38,7 +38,7 @@ export default function FeaturedProperties() {
   ];
 
   return (
-    <section className="bg-gray-50 py-20">
+    <section id="explore" className="bg-gray-50 py-20 scroll-mt-24">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Header */}
