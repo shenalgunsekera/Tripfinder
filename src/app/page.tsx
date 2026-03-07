@@ -89,10 +89,10 @@ export default function Home() {
       
       {/* Card */}
       {[
-        { name: "Colombo", properties: 45, image: "/colombo.jpg" },
-        { name: "Galle", properties: 32, image: "/galle.jpg" },
-        { name: "Ella", properties: 28, image: "/ella.jpg" },
-        { name: "Bentota", properties: 38, image: "/bentota.jpg" },
+        { name: "Colombo", properties: 45, image: "/images/colombo.jfif" },
+        { name: "Galle", properties: 32, image: "/images/galle.jfif" },
+        { name: "Ella", properties: 28, image: "/images/ella.jfif" },
+        { name: "Bentota", properties: 38, image: "/images/bentota.jfif" },
       ].map((place, index) => (
         <div
           key={index}

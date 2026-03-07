@@ -2,22 +2,23 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Mail, Lock, Building2, UserRound } from "lucide-react";
 import { auth } from "@/lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { toast } from "sonner";
 
 type Role = "traveler" | "host";
 
 export default function LoginPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const initialRole = useMemo<Role>(() => {
     return searchParams.get("role") === "host" ? "host" : "traveler";
   }, [searchParams]);
 
   const [role, setRole] = useState<Role>(initialRole);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,13 +37,29 @@ export default function LoginPage() {
 
       console.log("Logged in:", userCredential.user);
 
-      alert("Login successful!");
+      toast("Welcome back", {
+        description: "Login successful. Preparing your dashboard.",
+        style: {
+          background: "linear-gradient(135deg,#22c55e,#16a34a)",
+          color: "white",
+          borderRadius: "16px",
+          padding: "16px 20px",
+        },
+      });
 
-      // redirect example
-      // router.push("/dashboard");
+      setTimeout(() => {
+        router.push(role === "host" ? "/host-dashboard" : "/dashboard");
+      }, 1200);
 
     } catch (error: any) {
-      alert(error.message);
+      toast("Login failed", {
+        description: error.message,
+        style: {
+          background: "#1f2937",
+          color: "white",
+          borderRadius: "16px",
+        },
+      });
     } finally {
       setLoading(false);
     }
@@ -60,15 +77,14 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* ROLE SWITCH */}
+          {/* Role Switch */}
           <div className="mb-6 grid grid-cols-2 rounded-xl bg-gray-100 p-1">
             <button
-              type="button"
               onClick={() => setRole("traveler")}
-              className={`flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+              className={`flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold ${
                 role === "traveler"
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-white shadow-sm"
+                  : "text-gray-600"
               }`}
             >
               <UserRound className="h-4 w-4" />
@@ -76,12 +92,11 @@ export default function LoginPage() {
             </button>
 
             <button
-              type="button"
               onClick={() => setRole("host")}
-              className={`flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+              className={`flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold ${
                 role === "host"
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-white shadow-sm"
+                  : "text-gray-600"
               }`}
             >
               <Building2 className="h-4 w-4" />
@@ -89,12 +104,10 @@ export default function LoginPage() {
             </button>
           </div>
 
-          {/* LOGIN FORM */}
           <form onSubmit={handleLogin} className="space-y-4">
 
-            {/* EMAIL */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-gray-700">
                 Email
               </label>
 
@@ -103,18 +116,17 @@ export default function LoginPage() {
 
                 <input
                   type="email"
+                  required
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  required
                   className="h-11 w-full bg-transparent text-sm outline-none"
                 />
               </div>
             </div>
 
-            {/* PASSWORD */}
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">
+              <label className="text-sm font-medium text-gray-700">
                 Password
               </label>
 
@@ -123,20 +135,18 @@ export default function LoginPage() {
 
                 <input
                   type="password"
-                  placeholder="Enter your password"
+                  required
+                  placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required
                   className="h-11 w-full bg-transparent text-sm outline-none"
                 />
               </div>
             </div>
 
-            {/* BUTTON */}
             <button
-              type="submit"
               disabled={loading}
-              className="h-11 w-full rounded-lg bg-primary text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+              className="h-11 w-full rounded-lg bg-primary text-sm font-semibold text-primary-foreground"
             >
               {loading
                 ? "Logging in..."
