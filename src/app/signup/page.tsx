@@ -4,16 +4,47 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Mail, Lock, Building2, UserRound, User } from "lucide-react";
+import { auth } from "@/lib/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 type Role = "traveler" | "host";
 
 export default function SignupPage() {
   const searchParams = useSearchParams();
+
   const initialRole = useMemo<Role>(() => {
     return searchParams.get("role") === "host" ? "host" : "traveler";
   }, [searchParams]);
 
   const [role, setRole] = useState<Role>(initialRole);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      console.log("User created:", userCredential.user);
+
+      alert("Account created successfully!");
+
+    } catch (error: any) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="bg-gray-50 py-16">
@@ -39,6 +70,7 @@ export default function SignupPage() {
               <UserRound className="h-4 w-4" />
               Traveler
             </button>
+
             <button
               type="button"
               onClick={() => setRole("host")}
@@ -53,7 +85,10 @@ export default function SignupPage() {
             </button>
           </div>
 
-          <form className="space-y-4">
+          {/* FORM */}
+          <form onSubmit={handleSignup} className="space-y-4">
+
+            {/* NAME */}
             <div>
               <label className="mb-1 block text-sm font-medium text-gray-700">
                 Full name
@@ -63,11 +98,15 @@ export default function SignupPage() {
                 <input
                   type="text"
                   placeholder="Your full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
                   className="h-11 w-full bg-transparent text-sm outline-none"
                 />
               </div>
             </div>
 
+            {/* EMAIL */}
             <div>
               <label className="mb-1 block text-sm font-medium text-gray-700">
                 Email
@@ -77,11 +116,15 @@ export default function SignupPage() {
                 <input
                   type="email"
                   placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                   className="h-11 w-full bg-transparent text-sm outline-none"
                 />
               </div>
             </div>
 
+            {/* PASSWORD */}
             <div>
               <label className="mb-1 block text-sm font-medium text-gray-700">
                 Password
@@ -91,12 +134,16 @@ export default function SignupPage() {
                 <input
                   type="password"
                   placeholder="Create a password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
                   className="h-11 w-full bg-transparent text-sm outline-none"
                 />
               </div>
             </div>
 
-            {role === "host" ? (
+            {/* HOST OPTION */}
+            {role === "host" && (
               <div>
                 <label className="mb-1 block text-sm font-medium text-gray-700">
                   Hosting type
@@ -107,14 +154,19 @@ export default function SignupPage() {
                   <option>Company</option>
                 </select>
               </div>
-            ) : null}
+            )}
 
+            {/* BUTTON */}
             <button
               type="submit"
+              disabled={loading}
               className="h-11 w-full rounded-lg bg-primary text-sm font-semibold text-primary-foreground transition hover:opacity-90"
             >
-              Sign up as {role === "host" ? "Host" : "Traveler"}
+              {loading
+                ? "Creating account..."
+                : `Sign up as ${role === "host" ? "Host" : "Traveler"}`}
             </button>
+
           </form>
 
           <p className="mt-5 text-center text-sm text-gray-600">
