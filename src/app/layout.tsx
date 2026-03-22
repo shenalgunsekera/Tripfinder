@@ -3,11 +3,13 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import GlobalSplashLoader from "@/components/GlobalSplashLoader";
-import { Toaster } from "sonner";
+import { AuthProvider } from "@/context/AuthContext";
+
 
 export const metadata: Metadata = {
-  title: "TripFinder",
-  description: "Discover and book unique travel experiences worldwide.",
+  title: "TripFinder – AI-Powered Short Stay Booking in Sri Lanka",
+  description:
+    "Discover and book unique short-stay accommodations across Sri Lanka. AI-powered recommendations, instant booking, and verified hosts.",
   icons: {
     icon: "/tripfinder-logo.svg",
     shortcut: "/tripfinder-logo.svg",
@@ -23,30 +25,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col bg-white text-gray-900 antialiased">
-        
-        <GlobalSplashLoader />
+        <AuthProvider>
+          <GlobalSplashLoader />
 
-        
-        <Toaster
-          position="top-center"
-          richColors
-          closeButton
-          toastOptions={{
-            duration: 4000,
-          }}
-        />
+          <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
+            <Navbar />
+          </header>
 
-        <header className="sticky top-0 z-50 border-b border-gray-200 bg-white">
-          <Navbar />
-        </header>
+          <main className="flex-1">
+            {children}
+          </main>
 
-        <main className="flex-1">
-          {children}
-        </main>
-
-        <Footer />
-
+          <Footer />
+        </AuthProvider>
       </body>
+
     </html>
   );
 }
