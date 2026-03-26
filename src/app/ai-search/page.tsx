@@ -29,26 +29,23 @@ export default function AISearchPage() {
   const [error, setError] = useState("");
   const [allProperties, setAllProperties] = useState<Property[]>([]);
 
+  // Load properties, then auto-search if URL has a query param
   useEffect(() => {
-    async function loadProperties() {
-      setAllProperties(await getProperties());
+    async function init() {
+      const props = await getProperties();
+      setAllProperties(props);
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get("q");
+      if (q) {
+        setQuery(q);
+        void handleSearchWithProps(q, props);
+      }
     }
-
-    void loadProperties();
-  }, []);
-
-  // Pre-fill query from URL param
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const q = params.get("q");
-    if (q) {
-      setQuery(q);
-      handleSearch(q);
-    }
+    void init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function handleSearch(q: string = query) {
+  async function handleSearchWithProps(q: string, props: Property[]) {
     if (!q.trim()) return;
     setLoading(true);
     setError("");
@@ -58,7 +55,7 @@ export default function AISearchPage() {
       const response = await fetch("/api/ai-search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: q, properties: allProperties }),
+        body: JSON.stringify({ query: q, properties: props }),
       });
 
       const data = await response.json();
@@ -78,6 +75,10 @@ export default function AISearchPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function handleSearch(q: string = query) {
+    return handleSearchWithProps(q, allProperties);
   }
 
   return (

@@ -80,7 +80,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-primary">
+                <Link href="/contact" className="hover:text-primary">
                   Contact Us
                 </Link>
               </li>

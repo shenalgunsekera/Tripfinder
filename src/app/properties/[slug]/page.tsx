@@ -72,8 +72,9 @@ export default function PropertyDetailPage() {
       alert("Please select check-in and check-out dates.");
       return;
     }
-    if (nights < property!.minNights) {
-      alert(`Minimum stay is ${property!.minNights} night(s).`);
+    const effectiveMin = property!.instantBook ? 1 : property!.minNights;
+    if (nights < effectiveMin) {
+      alert(`Minimum stay is ${effectiveMin} night(s).`);
       return;
     }
     const params = new URLSearchParams({

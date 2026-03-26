@@ -35,6 +35,76 @@ export default function AdminBookingsPage() {
     await refreshBookings();
   }
 
+  function escapeCsvValue(value: string | number | boolean | null | undefined) {
+    const normalized = value == null ? "" : String(value);
+    const escaped = normalized.replace(/"/g, "\"\"");
+    return `"${escaped}"`;
+  }
+
+  function downloadCsv() {
+    if (bookings.length === 0) return;
+
+    const headers = [
+      "Booking ID",
+      "Guest Name",
+      "Guest Email",
+      "Host Name",
+      "Property Title",
+      "Property Location",
+      "Check In",
+      "Check Out",
+      "Guests",
+      "Nights",
+      "Price Per Night",
+      "Subtotal",
+      "Service Fee",
+      "Total",
+      "Status",
+      "Type",
+      "Payment Method",
+      "Created At",
+      "Special Requests",
+    ];
+
+    const rows = bookings.map((booking) => [
+      booking.id,
+      booking.guestName,
+      booking.guestEmail,
+      booking.hostName,
+      booking.propertyTitle,
+      booking.propertyLocation,
+      booking.checkIn,
+      booking.checkOut,
+      booking.guests,
+      booking.nights,
+      booking.pricePerNight,
+      booking.subtotal,
+      booking.serviceFee,
+      booking.total,
+      booking.status,
+      booking.type,
+      booking.paymentMethod,
+      booking.createdAt,
+      booking.specialRequests ?? "",
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map((row) => row.map((value) => escapeCsvValue(value)).join(","))
+      .join("\r\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const exportDate = new Date().toISOString().slice(0, 10);
+
+    link.href = url;
+    link.download = `tripfinder-bookings-${exportDate}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
   const filtered = bookings
     .filter((b) => {
       const q = search.toLowerCase();
@@ -107,7 +177,11 @@ export default function AdminBookingsPage() {
           <p className="text-red-200 text-sm">Total Platform Revenue</p>
           <p className="text-2xl font-bold">LKR {totalRevenue.toLocaleString()}</p>
         </div>
-        <button className="flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/20 transition">
+        <button
+          onClick={downloadCsv}
+          disabled={bookings.length === 0}
+          className="flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-4 py-2 text-sm font-medium transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+        >
           <Download className="h-4 w-4" />
           Export CSV
         </button>

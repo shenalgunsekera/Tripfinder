@@ -100,14 +100,6 @@ export default function LoginPage() {
             </button>
           </div>
 
-          <div className="mb-4 rounded-lg border border-blue-200 bg-blue-50 p-3 text-xs text-blue-700">
-            <strong>Demo accounts:</strong>
-            <div className="mt-1 space-y-0.5">
-              <div>Traveler: <span className="font-mono">{DEMO_CREDENTIALS.traveler.email}</span> / <span className="font-mono">{DEMO_CREDENTIALS.traveler.password}</span></div>
-              <div>Host: <span className="font-mono">{DEMO_CREDENTIALS.host.email}</span> / <span className="font-mono">{DEMO_CREDENTIALS.host.password}</span></div>
-              <div>Admin: <span className="font-mono">{DEMO_CREDENTIALS.admin.email}</span> / <span className="font-mono">{DEMO_CREDENTIALS.admin.password}</span></div>
-            </div>
-          </div>
 
           {error && (
             <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">

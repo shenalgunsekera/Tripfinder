@@ -41,6 +41,11 @@ async function collectionHasData(name: keyof typeof COLLECTIONS) {
   return !snapshot.empty;
 }
 
+async function getExistingIds(name: keyof typeof COLLECTIONS) {
+  const snapshot = await getDocs(collectionRef(name));
+  return new Set(snapshot.docs.map((item) => item.id));
+}
+
 async function replaceCollection<T extends WithId>(name: keyof typeof COLLECTIONS, items: T[]) {
   const ref = collectionRef(name);
   const existing = await getDocs(ref);
@@ -93,6 +98,15 @@ async function ensureSeeded() {
         batch.set(doc(db, COLLECTIONS.properties, property.id), property);
       }
       shouldCommit = true;
+    } else {
+      const existingPropertyIds = await getExistingIds("properties");
+
+      for (const property of PROPERTIES) {
+        if (!existingPropertyIds.has(property.id)) {
+          batch.set(doc(db, COLLECTIONS.properties, property.id), property);
+          shouldCommit = true;
+        }
+      }
     }
 
     if (shouldCommit) {

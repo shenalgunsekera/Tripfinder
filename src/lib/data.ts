@@ -95,7 +95,7 @@ export interface Booking {
 
 // ─── Properties Data ───────────────────────────────────────────────────────────
 
-export const PROPERTIES: Property[] = [
+const CORE_PROPERTIES: Property[] = [
   {
     id: "prop-001",
     slug: "luxury-beach-villa-bentota",
@@ -669,6 +669,310 @@ export const PROPERTIES: Property[] = [
   },
 ];
 
+const GENERATED_PROPERTY_CITIES = [
+  {
+    city: "Colombo",
+    location: "Colombo City",
+    addressArea: "Colombo",
+    baseLat: 6.9271,
+    baseLng: 79.8612,
+    tags: ["City View", "24/7 Security", "Washer"],
+  },
+  {
+    city: "Galle",
+    location: "Galle Coast",
+    addressArea: "Galle",
+    baseLat: 6.0535,
+    baseLng: 80.221,
+    tags: ["Ocean View", "Garden", "BBQ"],
+  },
+  {
+    city: "Ella",
+    location: "Ella Hills",
+    addressArea: "Ella",
+    baseLat: 6.8667,
+    baseLng: 81.0466,
+    tags: ["Mountain View", "Fireplace", "Hiking Access"],
+  },
+  {
+    city: "Bentota",
+    location: "Bentota Beach",
+    addressArea: "Bentota",
+    baseLat: 6.4218,
+    baseLng: 79.9957,
+    tags: ["Beach Access", "Ocean View", "Private Pool"],
+  },
+  {
+    city: "Mirissa",
+    location: "Mirissa Bay",
+    addressArea: "Mirissa",
+    baseLat: 5.9483,
+    baseLng: 80.4716,
+    tags: ["Beach Access", "Private Terrace", "Outdoor Shower"],
+  },
+  {
+    city: "Sigiriya",
+    location: "Sigiriya Nature Zone",
+    addressArea: "Sigiriya",
+    baseLat: 7.957,
+    baseLng: 80.7603,
+    tags: ["Jungle View", "Bird Watching", "Nature Walks"],
+  },
+  {
+    city: "Kandy",
+    location: "Kandy Lake Side",
+    addressArea: "Kandy",
+    baseLat: 7.2906,
+    baseLng: 80.6337,
+    tags: ["Lake View", "Garden", "Hot Water"],
+  },
+  {
+    city: "Negombo",
+    location: "Negombo Lagoon",
+    addressArea: "Negombo",
+    baseLat: 7.2083,
+    baseLng: 79.8358,
+    tags: ["Lagoon View", "Private Dock", "BBQ"],
+  },
+  {
+    city: "Nuwara Eliya",
+    location: "Tea Country",
+    addressArea: "Nuwara Eliya",
+    baseLat: 6.9497,
+    baseLng: 80.7891,
+    tags: ["Mountain View", "Breakfast Included", "Garden"],
+  },
+  {
+    city: "Arugam Bay",
+    location: "Arugam Bay Beach",
+    addressArea: "Arugam Bay",
+    baseLat: 6.8408,
+    baseLng: 81.8368,
+    tags: ["Beach Access", "Surfboard Rental", "Hammock"],
+  },
+  {
+    city: "Trincomalee",
+    location: "Nilaveli Beach",
+    addressArea: "Trincomalee",
+    baseLat: 8.5874,
+    baseLng: 81.2152,
+    tags: ["Beach Access", "Snorkeling Equipment", "Hammock"],
+  },
+  {
+    city: "Unawatuna",
+    location: "Unawatuna Beach",
+    addressArea: "Unawatuna",
+    baseLat: 6.0101,
+    baseLng: 80.2483,
+    tags: ["Beach Access", "Ocean View", "Air Conditioning"],
+  },
+] as const;
+
+const GENERATED_PROPERTY_TYPES: {
+  type: PropertyType;
+  titlePrefix: string;
+  guestRange: [number, number];
+  bedroomRange: [number, number];
+  bathroomRange: [number, number];
+  priceRange: [number, number];
+  amenityBase: string[];
+}[] = [
+  {
+    type: "Villa",
+    titlePrefix: "Ocean Villa",
+    guestRange: [4, 10],
+    bedroomRange: [2, 5],
+    bathroomRange: [2, 4],
+    priceRange: [16000, 36000],
+    amenityBase: ["WiFi", "Kitchen", "Air Conditioning", "Parking"],
+  },
+  {
+    type: "Apartment",
+    titlePrefix: "City Apartment",
+    guestRange: [2, 6],
+    bedroomRange: [1, 3],
+    bathroomRange: [1, 2],
+    priceRange: [7000, 18000],
+    amenityBase: ["WiFi", "Kitchen", "Air Conditioning", "TV"],
+  },
+  {
+    type: "Room",
+    titlePrefix: "Coastal Room",
+    guestRange: [1, 3],
+    bedroomRange: [1, 1],
+    bathroomRange: [1, 1],
+    priceRange: [5000, 12000],
+    amenityBase: ["WiFi", "Air Conditioning", "Hot Water", "TV"],
+  },
+  {
+    type: "Homestay",
+    titlePrefix: "Local Homestay",
+    guestRange: [2, 6],
+    bedroomRange: [1, 3],
+    bathroomRange: [1, 2],
+    priceRange: [6500, 15000],
+    amenityBase: ["WiFi", "Breakfast Included", "Garden", "Hot Water"],
+  },
+  {
+    type: "Cottage",
+    titlePrefix: "Garden Cottage",
+    guestRange: [2, 5],
+    bedroomRange: [1, 2],
+    bathroomRange: [1, 2],
+    priceRange: [8000, 17000],
+    amenityBase: ["WiFi", "Garden", "Kitchen", "Parking"],
+  },
+  {
+    type: "Cabin",
+    titlePrefix: "Nature Cabin",
+    guestRange: [2, 4],
+    bedroomRange: [1, 2],
+    bathroomRange: [1, 2],
+    priceRange: [9000, 19000],
+    amenityBase: ["WiFi", "Hot Water", "Nature Walks", "Parking"],
+  },
+];
+
+const GENERATED_HOSTS = [
+  {
+    hostId: "host-001",
+    hostName: "Saman Perera",
+    hostAvatar: "https://picsum.photos/seed/host1/80/80",
+    hostJoined: "2020",
+    hostRating: 4.9,
+    hostResponseTime: "within 1 hour",
+    isSuperhost: true,
+  },
+  {
+    hostId: "host-002",
+    hostName: "Dilshan Rathnayake",
+    hostAvatar: "https://picsum.photos/seed/host2/80/80",
+    hostJoined: "2021",
+    hostRating: 4.8,
+    hostResponseTime: "within 2 hours",
+    isSuperhost: false,
+  },
+  {
+    hostId: "host-003",
+    hostName: "Chamara Bandara",
+    hostAvatar: "https://picsum.photos/seed/host3/80/80",
+    hostJoined: "2019",
+    hostRating: 4.9,
+    hostResponseTime: "within 3 hours",
+    isSuperhost: true,
+  },
+  {
+    hostId: "host-004",
+    hostName: "Nirosha Jayawardena",
+    hostAvatar: "https://picsum.photos/seed/host4/80/80",
+    hostJoined: "2018",
+    hostRating: 5,
+    hostResponseTime: "within 30 minutes",
+    isSuperhost: true,
+  },
+  {
+    hostId: "host-005",
+    hostName: "Ruwantha Pathirana",
+    hostAvatar: "https://picsum.photos/seed/host5/80/80",
+    hostJoined: "2022",
+    hostRating: 4.7,
+    hostResponseTime: "within 2 hours",
+    isSuperhost: false,
+  },
+  {
+    hostId: "host-006",
+    hostName: "Kumari Dissanayake",
+    hostAvatar: "https://picsum.photos/seed/host6/80/80",
+    hostJoined: "2019",
+    hostRating: 4.8,
+    hostResponseTime: "within 4 hours",
+    isSuperhost: true,
+  },
+] as const;
+
+function clampRange(min: number, max: number, offset: number) {
+  return min + (offset % (max - min + 1));
+}
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function generateAdditionalProperties(count: number): Property[] {
+  return Array.from({ length: count }, (_, index) => {
+    const number = index + 13;
+    const cityMeta = GENERATED_PROPERTY_CITIES[index % GENERATED_PROPERTY_CITIES.length];
+    const typeMeta = GENERATED_PROPERTY_TYPES[index % GENERATED_PROPERTY_TYPES.length];
+    const hostMeta = GENERATED_HOSTS[index % GENERATED_HOSTS.length];
+    const guests = clampRange(typeMeta.guestRange[0], typeMeta.guestRange[1], index);
+    const bedrooms = clampRange(typeMeta.bedroomRange[0], typeMeta.bedroomRange[1], index);
+    const bathrooms = clampRange(typeMeta.bathroomRange[0], typeMeta.bathroomRange[1], index + 1);
+    const price = clampRange(typeMeta.priceRange[0], typeMeta.priceRange[1], index * 731);
+    const rating = Number((4.3 + ((index % 7) * 0.1)).toFixed(1));
+    const reviewCount = 18 + ((index * 11) % 185);
+    const instantBook = index % 3 !== 0;
+    const isVerified = index % 9 !== 0;
+    const minNights = 1 + (index % 4);
+    const suffix = `${cityMeta.city} ${Math.floor(index / GENERATED_PROPERTY_CITIES.length) + 1}`;
+    const title = `${typeMeta.titlePrefix} - ${suffix}`;
+    const slug = slugify(`${typeMeta.titlePrefix}-${suffix}-${number}`);
+    const amenities = Array.from(new Set([...typeMeta.amenityBase, ...cityMeta.tags, index % 2 === 0 ? "Washer" : "Breakfast Included"]));
+    const rules = [
+      "No smoking indoors",
+      instantBook ? "Self check-in available" : "Host approval required",
+      `Minimum stay of ${minNights} night${minNights > 1 ? "s" : ""}`,
+    ];
+
+    return {
+      id: `prop-${String(number).padStart(3, "0")}`,
+      slug,
+      title,
+      description: `A well-reviewed ${typeMeta.type.toLowerCase()} in ${cityMeta.city} designed for comfortable stays, with local character, reliable amenities, and easy access to nearby highlights.`,
+      type: typeMeta.type,
+      location: cityMeta.location,
+      city: cityMeta.city,
+      address: `${100 + index} ${cityMeta.addressArea} Road, ${cityMeta.city}, Sri Lanka`,
+      price,
+      guests,
+      bedrooms,
+      bathrooms,
+      rating,
+      reviewCount,
+      instantBook,
+      hostId: hostMeta.hostId,
+      hostName: hostMeta.hostName,
+      hostAvatar: hostMeta.hostAvatar,
+      hostJoined: hostMeta.hostJoined,
+      hostRating: hostMeta.hostRating,
+      hostResponseTime: hostMeta.hostResponseTime,
+      isSuperhost: hostMeta.isSuperhost,
+      images: [
+        `https://picsum.photos/seed/${slug}-1/800/600`,
+        `https://picsum.photos/seed/${slug}-2/800/600`,
+        `https://picsum.photos/seed/${slug}-3/800/600`,
+      ],
+      amenities,
+      rules,
+      checkIn: instantBook ? "2:00 PM" : "3:00 PM",
+      checkOut: "11:00 AM",
+      minNights,
+      isActive: true,
+      isVerified,
+      coordinates: {
+        lat: Number((cityMeta.baseLat + (index % 5) * 0.011).toFixed(4)),
+        lng: Number((cityMeta.baseLng + (index % 5) * 0.013).toFixed(4)),
+      },
+      reviews: [],
+      createdAt: `2025-${String((index % 12) + 1).padStart(2, "0")}-${String(((index * 2) % 28) + 1).padStart(2, "0")}`,
+    };
+  });
+}
+
+export const PROPERTIES: Property[] = [...CORE_PROPERTIES, ...generateAdditionalProperties(100)];
+
 // ─── Users Data ────────────────────────────────────────────────────────────────
 
 export const USERS: User[] = [
@@ -846,6 +1150,7 @@ export const CITIES = [
   "Nuwara Eliya",
   "Arugam Bay",
   "Trincomalee",
+  "Unawatuna",
 ];
 
 export const PROPERTY_TYPES: PropertyType[] = [
