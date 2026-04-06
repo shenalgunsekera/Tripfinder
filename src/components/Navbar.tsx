@@ -77,6 +77,7 @@ export default function Navbar() {
   const navLinks = [
     { href: "/properties", label: "Explore" },
     { href: "/ai-search", label: "AI Search" },
+    { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
     { href: "/#become-a-host", label: "Become a Host" },
   ];
